@@ -1,8 +1,11 @@
 package br.com.alura.domain;
 
-import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Builder
+
+@Getter
+@NoArgsConstructor
 public class Pet {
     private Long id;
     private String tipo;
@@ -11,17 +14,38 @@ public class Pet {
     private Integer idade;
     private String cor;
     private Float peso;
+    public Pet(String tipo,
+               String nome,
+               String raca,
+               Integer idade
+             ) {
+        this.tipo = tipo;
+        this.nome = nome;
+        this.raca = raca;
+        this.idade = idade;
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "id=" + id +
-                ", tipo='" + tipo + '\'' +
-                ", nome='" + nome + '\'' +
-                ", raca='" + raca + '\'' +
-                ", idade=" + idade +
-                ", cor='" + cor + '\'' +
-                ", peso=" + peso +
-                '}';
     }
+    public Pet(String tipo,
+               String nome,
+               String raca,
+               Integer idade,
+               String cor,
+               Float peso) {
+        this.tipo = tipo;
+        this.nome = nome;
+        this.raca = raca;
+        this.idade = idade;
+        this.cor = cor;
+        this.peso = peso;
+    }
+
+    public Pet(long id, String tipo, String nome, String raca, int idade) {
+        this.id = id;
+        this.tipo = tipo;
+        this.nome = nome;
+        this.raca = raca;
+        this.idade = idade;
+    }
+
+
 }

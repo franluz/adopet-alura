@@ -13,7 +13,6 @@ public class AdopetConsoleApplication {
         AbrigoService abrigoService = new AbrigoService(clientHttpConfiguration);
         PetService petService = new PetService(clientHttpConfiguration);
         System.out.println("##### BOAS VINDAS AO SISTEMA ADOPET CONSOLE #####");
-        AdopetConsoleApplication adopetConsoleApplication = new AdopetConsoleApplication();
         try {
             int opcaoEscolhida = 0;
             while (opcaoEscolhida != 5) {

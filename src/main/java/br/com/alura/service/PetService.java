@@ -2,14 +2,11 @@ package br.com.alura.service;
 
 import br.com.alura.client.ClientHttpConfiguration;
 import br.com.alura.domain.Pet;
-import com.google.gson.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
 
@@ -29,26 +26,28 @@ public class PetService {
             System.out.println("ID ou nome não cadastrado!");
         }
         String responseBody = response.body();
-        JsonArray jsonArray = JsonParser.parseString(responseBody).getAsJsonArray();
+        Pet[] pets = new ObjectMapper().readValue(responseBody,Pet[].class);
         System.out.println("Pets cadastrados:");
-        for (JsonElement element : jsonArray) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            long id = jsonObject.get("id").getAsLong();
-            String tipo = jsonObject.get("tipo").getAsString();
-            String nome = jsonObject.get("nome").getAsString();
-            String raca = jsonObject.get("raca").getAsString();
-            int idade = jsonObject.get("idade").getAsInt();
-            Pet pet =  Pet.builder().id(id).tipo(tipo).nome(nome).raca(raca).idade(idade).build();
-            System.out.println(pet.toString());
+        for (Pet element : pets) {
+            long id = element.getId();
+            String tipo = element.getTipo();
+            String nome = element.getNome();
+            String raca = element.getRaca();
+            int idade = element.getIdade();
+            Pet pet =  new Pet(id,tipo,nome,raca,idade) ;
+          //  System.out.println(pet);
+            System.out.println(id +" - " +tipo +" - " +nome +" - " +raca +" - " +idade +" ano(s)");
+
         }
     }
 
     public void importarPetsDoAbrigo() throws IOException, InterruptedException {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Digite o id ou nome do abrigo:");
-        String idOuNome = new Scanner(System.in).nextLine();
+        String idOuNome =  scanner.nextLine();
 
         System.out.println("Digite o nome do arquivo CSV:");
-        String nomeArquivo = new Scanner(System.in).nextLine();
+        String nomeArquivo = scanner.nextLine();
 
         BufferedReader reader = null;
         try {
@@ -65,9 +64,12 @@ public class PetService {
             int idade = Integer.parseInt(campos[3]);
             String cor = campos[4];
             Float peso = Float.parseFloat(campos[5]);
-            Pet pet =   Pet.builder().tipo(tipo).nome(nome).raca(raca).idade(idade).cor(cor).peso(peso).build();
+            Pet pet = new Pet(tipo.toUpperCase(), nome, raca, idade, cor, peso);
+
+
             String uri = "http://localhost:8080/abrigos/" + idOuNome + "/pets";
             HttpResponse<String> response = clientHttpConfiguration.disparaRequisicaoPost(uri, pet);
+
             int statusCode = response.statusCode();
             String responseBody = response.body();
             if (statusCode == 200) {

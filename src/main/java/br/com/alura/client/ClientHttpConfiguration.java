@@ -22,7 +22,6 @@ public class ClientHttpConfiguration {
 
     public   HttpResponse<String> disparaRequisicaoPost(String uri, Object object) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
-        //    String uri = "http://localhost:8080/abrigos";
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(uri))
                 .header("Content-Type", "application/json")
